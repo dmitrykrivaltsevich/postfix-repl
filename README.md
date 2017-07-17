@@ -5,7 +5,7 @@ TBA
 TBA
 
 ## Users guideline
-TBA
+Use: `sbt run` command to run interactive interpreter. Use `CTRL+C` to exit REPL.
 
 ## Contributors guideline
 TBA

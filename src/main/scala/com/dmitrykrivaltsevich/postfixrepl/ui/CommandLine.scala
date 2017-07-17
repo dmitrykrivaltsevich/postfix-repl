@@ -2,6 +2,7 @@ package com.dmitrykrivaltsevich.postfixrepl.ui
 
 import com.dmitrykrivaltsevich.postfixrepl.interpreter.PostFixRepl
 
+import scala.annotation.tailrec
 import scala.io.StdIn
 
 object CommandLine extends App {
@@ -16,9 +17,13 @@ object CommandLine extends App {
   val repl = new PostFixRepl
   repl.loop(in, out)
 
+  @tailrec
   private def in: String = {
     print("> ")
-    StdIn.readLine()
+    StdIn.readLine() match {
+      case "" => in
+      case str => str
+    }
   }
 
   private def out(msg: String): Unit =
