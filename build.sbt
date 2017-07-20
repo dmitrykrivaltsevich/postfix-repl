@@ -10,8 +10,12 @@ lazy val root = (project in file("."))
       "-Ywarn-unused", "-Xfatal-warnings"
     ),
     conflictManager := ConflictManager.strict,
-    libraryDependencies ++= testDependencies
+    libraryDependencies ++= (dependencies ++ testDependencies)
   )
+
+lazy val dependencies = Seq(
+  "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.6"
+)
 
 lazy val testDependencies = Seq(
   "org.specs2" %% "specs2-core" % "3.9.4" % "test"
