@@ -1,6 +1,7 @@
 package com.dmitrykrivaltsevich.postfixrepl.interpreter
 
 import scala.annotation.tailrec
+import scala.math.BigInt
 
 class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
   require(numberOfArguments == args.size) // TODO: move it into 'eval'
@@ -36,6 +37,13 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
     case MulCommand() => stack match {
       case NumericalCommand(v1) :: NumericalCommand(v2) :: rest => StepSuccess(NumericalCommand(v2 * v1) :: rest)
       case _ => StepFailure(stack, "not enough numbers to mul")
+    }
+
+    case DivCommand() => stack match {
+      case NumericalCommand(v1) :: NumericalCommand(v2) :: rest =>
+        if (v1 == 0) StepFailure(stack, "divide by zero")
+        else StepSuccess(NumericalCommand(v2 / v1) :: rest)
+      case _ => StepFailure(stack, "not enough numbers to div")
     }
 
     case _ => StepFailure(stack, s"unknown command '$command'")
