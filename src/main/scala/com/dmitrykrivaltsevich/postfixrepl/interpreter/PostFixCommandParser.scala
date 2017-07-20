@@ -20,7 +20,7 @@ object PostFixCommandParser extends RegexParsers {
 
   def numerical: Parser[NumberCommand] = """-?\d+""".r ^^ { result =>
     NumberCommand(result.toInt)
-  } | failure("numerical value expected")
+  } withFailureMessage "numerical value expected"
 
   def apply(input: String): Either[ParserFailure, (Int, List[PostFixCommand])] = parseAll(program, input) match {
     case Success(result, _) => Right(result)
