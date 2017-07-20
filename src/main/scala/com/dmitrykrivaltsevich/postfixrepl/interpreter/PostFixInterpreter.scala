@@ -1,14 +1,27 @@
 package com.dmitrykrivaltsevich.postfixrepl.interpreter
 
+import scala.annotation.tailrec
+
 class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
   require(numberOfArguments == args.size) // TODO: move it into 'eval'
 
-  //  def eval(commands: Stack[PostFixCommand]): ProgramResult = ???
+  @tailrec
+  final def eval(commands: List[PostFixCommand], stack: List[PostFixCommand]): ProgramResult = {
+    commands match {
+      case Nil => resultFrom(stack)
+      case (head: NumberCommand) :: tail =>
+        val updatedStack = head +: stack
+        eval(tail, updatedStack)
+      case _ => ProgramFailure(s"unknown command '${commands.head}'")
+    }
+  }
 
-  //  private def eval(command: PostFixCommand, stack: Stack[PostFixCommand]): StepResult = command match {
-  //    case nc: NumberCommand => StepSuccess(stack.push(nc))
-  //    case _ => StepFailure(stack, s"unknown command '$command'")
-  //  }
+  private def resultFrom(stack: List[PostFixCommand]): ProgramResult =
+    stack match {
+      case Nil => ProgramFailure("empty stack")
+      case NumberCommand(value) :: _ => ProgramSuccess(value)
+      case _ => ProgramFailure("not a number on top of the stack")
+    }
 
 }
 
