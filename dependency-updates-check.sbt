@@ -1,0 +1,1 @@
+(compileInputs in(Compile, compile)) := ((compileInputs in(Compile, compile)) dependsOn dependencyUpdates).value
