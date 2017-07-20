@@ -23,7 +23,7 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
     case nc: NumericalCommand => StepSuccess(nc :: stack)
     case AddCommand() => stack match {
       case NumericalCommand(v1) :: NumericalCommand(v2) :: rest => StepSuccess(NumericalCommand(v2 + v1) :: rest)
-      case _ => StepFailure(stack, "not enoug numbers to add")
+      case _ => StepFailure(stack, "not enough numbers to add")
     }
     case _ => StepFailure(stack, s"unknown command '$command'")
   }

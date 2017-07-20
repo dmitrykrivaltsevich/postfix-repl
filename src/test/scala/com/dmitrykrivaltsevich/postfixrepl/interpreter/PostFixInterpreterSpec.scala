@@ -11,8 +11,8 @@ class PostFixInterpreterSpec extends Specification {
     ${eval("(postfix 0 1 2)") must_== "2"}
     ${eval("(postfix 0 1 2 add)") must_== "3"}
     ${eval("(postfix 0 1 2 3 add)") must_== "5"}
-    ${eval("(postfix 0 add)") must_== "not enoug numbers to add"}
-    ${eval("(postfix 0 1 add)") must_== "not enoug numbers to add"}
+    ${eval("(postfix 0 add)") must_== "not enough numbers to add"}
+    ${eval("(postfix 0 1 add)") must_== "not enough numbers to add"}
 
   """
 
