@@ -1,4 +1,7 @@
 ## Overview of the project
+[![Build Status](https://travis-ci.org/dmitrykrivaltsevich/postfix-repl.svg?branch=master)](https://travis-ci.org/dmitrykrivaltsevich/postfix-repl)
+[![codecov](https://codecov.io/gh/dmitrykrivaltsevich/postfix-repl/branch/master/graph/badge.svg)](https://codecov.io/gh/dmitrykrivaltsevich/postfix-repl)
+
 "PostFix REPL" is a simple REPL (read-eval-print-loop) for the "PostFix" language described in the book [Design 
 Concepts in Programming Languages](https://www.amazon.com/Design-Concepts-Programming-Languages-Press/dp/0262201755).
  I haven't found any interpreters or compilers to play with described mini-language, so I decided to write my own.
