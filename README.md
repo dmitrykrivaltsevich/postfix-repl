@@ -1,5 +1,7 @@
 ## Overview of the project
-"PostFix REPL" is a simple REPL (read-eval-print-loop) for the "PostFix" language described in the book [Design Concepts in Programming Languages](https://www.amazon.com/Design-Concepts-Programming-Languages-Press/dp/0262201755). I haven't found interpreters or compilers to play with described mini-languages, so I decided to write my own interpreter.
+"PostFix REPL" is a simple REPL (read-eval-print-loop) for the "PostFix" language described in the book [Design 
+Concepts in Programming Languages](https://www.amazon.com/Design-Concepts-Programming-Languages-Press/dp/0262201755).
+ I haven't found any interpreters or compilers to play with described mini-language, so I decided to write my own.
 
 ## Overview of the PreFix language
 PostFix is 'A Simple Stack Language' (see page 8 in the book).
