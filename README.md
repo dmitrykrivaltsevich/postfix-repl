@@ -83,6 +83,9 @@ sequence.
 - `(C1 ... Cn)`. Push the _executable sequence_ `(C1 ... Cn)` as a single value onto the stack. Executable sequences
 are used in conjunction with `exec`.
 
+> In "PostFix" all parentheses are required and none are optional. Moving parentheses around changes the structure of 
+> the program and most likely changes its behavior.
+
 ## Users guideline
 Use: `sbt run` command to run interactive interpreter. Type `exit` or `:q` to exit the interpreter.
 
