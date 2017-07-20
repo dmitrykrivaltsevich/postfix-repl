@@ -9,3 +9,6 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.3")
 
 // code coverage
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.5.0")
+
+// displays dependency updates
+addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.3.1")
