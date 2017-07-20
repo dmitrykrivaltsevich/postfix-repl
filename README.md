@@ -45,4 +45,23 @@ Sample programs in PostFix language:
 Use: `sbt run` command to run interactive interpreter. Type `exit` or `:q` to exit the interpreter.
 
 ## Contributors guideline
-TBA
+
+Step 0: Fork it!
+
+Step 1: Build it.
+
+In order to build "PostFix REPL" from sources you'll need to have:
+1. Scala 2.12.2 SDK
+2. Sbt 0.13.15
+
+Compile and run tests: `sbt clean test`. Make sure that build works and all tests pass before you start adding new 
+features or fixing bugs.
+
+Step 2: [Submit an issue](https://github.com/dmitrykrivaltsevich/postfix-repl/issues). Good issue answers two 
+questions: `what` and `why`.
+
+Step 3: Work in a separate branch, prepend every commit by issue number like `#10 your commit message`.
+
+Step 4: Make a Pull Request from the branch in your fork repository to the master branch in this repository.
+
+Done.
