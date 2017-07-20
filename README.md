@@ -42,7 +42,7 @@ Sample programs in PostFix language:
 ```
 
 ## Users guideline
-Use: `sbt run` command to run interactive interpreter. Use `CTRL+C` to exit REPL.
+Use: `sbt run` command to run interactive interpreter. Type `exit` or `:q` to exit the interpreter.
 
 ## Contributors guideline
 TBA
