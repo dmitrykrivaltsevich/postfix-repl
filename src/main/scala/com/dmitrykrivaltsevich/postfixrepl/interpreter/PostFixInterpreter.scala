@@ -10,7 +10,7 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
     commands match {
       case Nil => resultFrom(stack)
       case (head: NumberCommand) :: tail =>
-        val updatedStack = head +: stack
+        val updatedStack = head +: stack // evaluation of 'number command'
         eval(tail, updatedStack)
       case _ => ProgramFailure(s"unknown command '${commands.head}'")
     }
