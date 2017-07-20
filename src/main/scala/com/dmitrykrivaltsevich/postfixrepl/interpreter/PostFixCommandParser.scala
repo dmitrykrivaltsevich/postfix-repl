@@ -16,11 +16,13 @@ object PostFixCommandParser extends RegexParsers {
     head :: tail
   }
 
-  def command: Parser[PostFixCommand] = numerical
+  def command: Parser[PostFixCommand] = numerical | add
 
-  def numerical: Parser[NumberCommand] = """-?\d+""".r ^^ { result =>
-    NumberCommand(result.toInt)
+  def numerical: Parser[NumericalCommand] = """-?\d+""".r ^^ { result =>
+    NumericalCommand(BigInt(result))
   } withFailureMessage "numerical value expected"
+
+  def add: Parser[AddCommand] = "add" ^^ (result => AddCommand())
 
   def apply(input: String): Either[ParserFailure, (Int, List[PostFixCommand])] = parseAll(program, input) match {
     case Success(result, _) => Right(result)

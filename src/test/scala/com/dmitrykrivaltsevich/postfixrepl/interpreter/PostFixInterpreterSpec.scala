@@ -7,24 +7,23 @@ class PostFixInterpreterSpec extends Specification {
 
   def is: SpecStructure = s2"""
 
-    "PostFix" interpreter should
-      return a number from the top of the stack as program result $checkResultFromStack
-      return failure when stack is empty at the end of the program $checkFailureOnEmptyStack
+    ${eval("(postfix 0 1)") must_== "1"}
+    ${eval("(postfix 0 1 2)") must_== "2"}
+    ${eval("(postfix 0 1 2 add)") must_== "3"}
+    ${eval("(postfix 0 1 2 3 add)") must_== "5"}
+    ${eval("(postfix 0 1 -1 add)") must_== "0"}
+    ${eval("(postfix 0 add)") must_== "not enough numbers to add"}
+    ${eval("(postfix 0 1 add)") must_== "not enough numbers to add"}
 
   """
 
-  private def checkResultFromStack = {
+  private def eval(input: String) = {
+    val Right((_, commands)) = PostFixCommandParser(input)
+
     val interpreter = new PostFixInterpreter(0, Nil)
-
-    interpreter.eval(
-      commands = List(NumberCommand(1), NumberCommand(2)),
-      stack = List.empty
-    ) must beEqualTo(ProgramSuccess(2))
-  }
-
-  private def checkFailureOnEmptyStack = {
-    val interpreter = new PostFixInterpreter(0, Nil)
-
-    interpreter.eval(commands = List.empty, stack = List.empty) must beEqualTo(ProgramFailure("empty stack"))
+    interpreter.eval(commands, Nil) match {
+      case ProgramSuccess(value) => value.toString()
+      case ProgramFailure(message) => message
+    }
   }
 }
