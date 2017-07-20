@@ -33,10 +33,20 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 mul)") must_== "not enough numbers to mul"}
       ${eval("(postfix 0 1 mul)") must_== "not enough numbers to mul"}
 
+    "div" command:
+      ${eval("(postfix 0 4 2 div)") must_== "2"}
+      ${eval("(postfix 0 3 1 div)") must_== "3"}
+      ${eval("(postfix 0 1 3 div)") must_== "0"}
+      ${eval("(postfix 0 0 2 div)") must_== "0"}
+      ${eval("(postfix 0 2 0 div)") must_== "divide by zero"}
+      ${eval("(postfix 0 2 div)") must_== "not enough numbers to div"}
+      ${eval("(postfix 0 div)") must_== "not enough numbers to div"}
+
     mixed commands:
       ${eval("(postfix 0 1057 888 sub 514 add)") must_== "683"}
       ${eval("(postfix 0 1 2 add 3 sub 4 mul)") must_== "0"}
       ${eval("(postfix 0 3 4 mul add)") must_== "not enough numbers to add"}
+      ${eval("(postfix 0 8 3 sub 3 div 1 add)") must_== "2"}
   """
 
   private def eval(input: String) = {
