@@ -4,3 +4,4 @@ trait PostFixCommand
 
 case class NumericalCommand(number: BigInt) extends PostFixCommand
 case class AddCommand() extends PostFixCommand
+case class SubCommand() extends PostFixCommand
