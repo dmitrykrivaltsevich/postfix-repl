@@ -9,11 +9,23 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
   final def eval(commands: List[PostFixCommand], stack: List[PostFixCommand]): ProgramResult = {
     commands match {
       case Nil => resultFrom(stack)
-      case (head: NumericalCommand) :: tail =>
-        val updatedStack = head +: stack // evaluation of 'number command'
-        eval(tail, updatedStack)
+      case head :: tail =>
+        val stepResult = eval(head, stack)
+        stepResult match {
+          case StepSuccess(updatedStack) => eval(tail, updatedStack)
+          case StepFailure(_, message) => ProgramFailure(message)
+        }
       case _ => ProgramFailure(s"unknown command '${commands.head}'")
     }
+  }
+
+  private def eval(command: PostFixCommand, stack: List[PostFixCommand]): StepResult = command match {
+    case nc: NumericalCommand => StepSuccess(nc :: stack)
+    case AddCommand() => stack match {
+      case NumericalCommand(v1) :: NumericalCommand(v2) :: rest => StepSuccess(NumericalCommand(v2 + v1) :: rest)
+      case _ => StepFailure(stack, "not enoug numbers to add")
+    }
+    case _ => StepFailure(stack, s"unknown command '$command'")
   }
 
   private def resultFrom(stack: List[PostFixCommand]): ProgramResult =
@@ -31,4 +43,4 @@ case class ProgramFailure(message: String) extends ProgramResult
 
 trait StepResult
 case class StepSuccess(stack: List[PostFixCommand]) extends StepResult
-case class StepFailure(stack: List[PostFixCommand], error: String) extends StepResult
+case class StepFailure(stack: List[PostFixCommand], message: String) extends StepResult
