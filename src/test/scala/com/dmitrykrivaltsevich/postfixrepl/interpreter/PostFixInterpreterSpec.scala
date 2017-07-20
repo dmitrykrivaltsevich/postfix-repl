@@ -17,7 +17,7 @@ class PostFixInterpreterSpec extends Specification {
     val interpreter = new PostFixInterpreter(0, Nil)
 
     interpreter.eval(
-      commands = List(NumberCommand(1), NumberCommand(2)),
+      commands = List(NumericalCommand(1), NumericalCommand(2)),
       stack = List.empty
     ) must beEqualTo(ProgramSuccess(2))
   }

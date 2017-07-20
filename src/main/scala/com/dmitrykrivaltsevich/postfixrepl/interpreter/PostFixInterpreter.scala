@@ -9,7 +9,7 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
   final def eval(commands: List[PostFixCommand], stack: List[PostFixCommand]): ProgramResult = {
     commands match {
       case Nil => resultFrom(stack)
-      case (head: NumberCommand) :: tail =>
+      case (head: NumericalCommand) :: tail =>
         val updatedStack = head +: stack // evaluation of 'number command'
         eval(tail, updatedStack)
       case _ => ProgramFailure(s"unknown command '${commands.head}'")
@@ -19,14 +19,14 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
   private def resultFrom(stack: List[PostFixCommand]): ProgramResult =
     stack match {
       case Nil => ProgramFailure("empty stack")
-      case NumberCommand(value) :: _ => ProgramSuccess(value)
+      case NumericalCommand(value) :: _ => ProgramSuccess(value)
       case _ => ProgramFailure("not a number on top of the stack")
     }
 
 }
 
 trait ProgramResult
-case class ProgramSuccess(value: Int) extends ProgramResult
+case class ProgramSuccess(value: BigInt) extends ProgramResult
 case class ProgramFailure(message: String) extends ProgramResult
 
 trait StepResult

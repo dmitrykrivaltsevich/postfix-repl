@@ -18,8 +18,8 @@ object PostFixCommandParser extends RegexParsers {
 
   def command: Parser[PostFixCommand] = numerical
 
-  def numerical: Parser[NumberCommand] = """-?\d+""".r ^^ { result =>
-    NumberCommand(result.toInt)
+  def numerical: Parser[NumericalCommand] = """-?\d+""".r ^^ { result =>
+    NumericalCommand(BigInt(result))
   } withFailureMessage "numerical value expected"
 
   def apply(input: String): Either[ParserFailure, (Int, List[PostFixCommand])] = parseAll(program, input) match {
