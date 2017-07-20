@@ -9,9 +9,9 @@ object PostFixCommandParser extends RegexParsers {
     (numberOfArguments, commands)
   }
 
-  def naturalNumber: Parser[Int] = """\d+""".r ^^ (_.toInt)
+  def naturalNumber: Parser[Int] = """\d+""".r ^^ (_.toInt) withFailureMessage "number of arguments expected"
 
-  def commandList: Parser[List[PostFixCommand]] = command ~ rep(" " ~> command) ^^ { result =>
+  def commandList: Parser[List[PostFixCommand]] = command ~ rep(command) ^^ { result =>
     val ~(head, tail) = result
     head :: tail
   }
