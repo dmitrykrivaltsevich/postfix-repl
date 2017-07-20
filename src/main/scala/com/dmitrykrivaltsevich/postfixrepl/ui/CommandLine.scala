@@ -2,12 +2,13 @@ package com.dmitrykrivaltsevich.postfixrepl.ui
 
 import com.dmitrykrivaltsevich.postfixrepl.interpreter.PostFixRepl
 
+import scala.Console.{GREEN, RESET}
 import scala.annotation.tailrec
 import scala.io.StdIn
 
 object CommandLine extends App {
 
-  println(
+  out(
     """
       |This is PostFix shell.
       |Type in expressions to have them evaluated.
@@ -19,7 +20,7 @@ object CommandLine extends App {
 
   @tailrec
   private def in: String = {
-    print("> ")
+    Console.print(s"${RESET}${GREEN}>${RESET} ")
     StdIn.readLine() match {
       case "" => in
       case str => str
@@ -27,6 +28,6 @@ object CommandLine extends App {
   }
 
   private def out(msg: String): Unit =
-    println(s"$msg\n")
+    Console.print(s"$msg\n\n")
 
 }
