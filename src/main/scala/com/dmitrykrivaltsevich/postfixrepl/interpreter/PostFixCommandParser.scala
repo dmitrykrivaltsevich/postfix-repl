@@ -18,7 +18,7 @@ object PostFixCommandParser extends RegexParsers {
 
   def command: Parser[Command] = numerical |
     add | sub | mul | div |
-    rem | lt | gt | eq | pop withFailureMessage "command or numeral expected"
+    rem | lt | gt | eq | pop | swap withFailureMessage "command or numeral expected"
 
   def numerical: Parser[Numerical] = """-?\d+""".r ^^ { result =>
     Numerical(BigInt(result))
@@ -41,6 +41,8 @@ object PostFixCommandParser extends RegexParsers {
   def eq: Parser[Eq] = "eq" ^^ (_ => Eq())
 
   def pop: Parser[Pop] = "pop" ^^ (_ => Pop())
+
+  def swap: Parser[Swap] = "swap" ^^ (_ => Swap())
 
   def apply(input: String): Either[ParserFailure, (Int, List[Command])] = parseAll(program, input) match {
     case Success(result, _) => Right(result)

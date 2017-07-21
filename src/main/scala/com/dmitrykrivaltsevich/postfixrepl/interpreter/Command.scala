@@ -12,3 +12,4 @@ case class Lt() extends Command
 case class Gt() extends Command
 case class Eq() extends Command
 case class Pop() extends Command
+case class Swap() extends Command

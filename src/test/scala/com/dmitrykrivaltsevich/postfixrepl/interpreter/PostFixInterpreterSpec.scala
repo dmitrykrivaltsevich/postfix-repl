@@ -81,6 +81,11 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 pop)") must_== "stack is empty"}
       ${eval("(postfix 0 1 pop pop)") must_== "stack is empty"}
 
+    "swap" command:
+      ${eval("(postfix 0 1 2 swap)") must_== "1"}
+      ${eval("(postfix 0 1 swap)") must_== "not enough commands to swap"}
+      ${eval("(postfix 0 swap)") must_== "not enough commands to swap"}
+
     mixed commands:
       ${eval("(postfix 0 1057 888 sub 514 add)") must_== "683"}
       ${eval("(postfix 0 1 2 add 3 sub 4 mul)") must_== "0"}
