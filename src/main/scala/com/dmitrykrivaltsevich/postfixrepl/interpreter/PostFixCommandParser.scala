@@ -4,35 +4,50 @@ import scala.util.parsing.combinator.RegexParsers
 
 object PostFixCommandParser extends RegexParsers {
 
-  def program: Parser[(Int, List[PostFixCommand])] = "(postfix" ~> naturalNumber ~ commandList <~ ")" ^^ { result =>
+  def program: Parser[(Int, List[Command])] = "(postfix" ~> naturalNumber ~ commandList <~ ")" ^^ { result =>
     val ~(numberOfArguments, commands) = result
     (numberOfArguments, commands)
   }
 
   def naturalNumber: Parser[Int] = """\d+""".r ^^ (_.toInt) withFailureMessage "number of arguments expected"
 
-  def commandList: Parser[List[PostFixCommand]] = command ~ rep(command) ^^ { result =>
+  def commandList: Parser[List[Command]] = command ~ rep(command) ^^ { result =>
     val ~(head, tail) = result
     head :: tail
   }
 
-  def command: Parser[PostFixCommand] = numerical | add | sub | mul | div | rem
+  def command: Parser[Command] = numerical |
+    add | sub | mul | div |
+    rem | lt | gt | eq | pop |
+    swap | sel withFailureMessage "command or numeral expected"
 
-  def numerical: Parser[NumericalCommand] = """-?\d+""".r ^^ { result =>
-    NumericalCommand(BigInt(result))
+  def numerical: Parser[Numerical] = """-?\d+""".r ^^ { result =>
+    Numerical(BigInt(result))
   } withFailureMessage "numerical value expected"
 
-  def add: Parser[AddCommand] = "add" ^^ (_ => AddCommand())
+  def add: Parser[Add] = "add" ^^ (_ => Add())
 
-  def sub: Parser[SubCommand] = "sub" ^^ (_ => SubCommand())
+  def sub: Parser[Sub] = "sub" ^^ (_ => Sub())
 
-  def mul: Parser[MulCommand] = "mul" ^^ (_ => MulCommand())
+  def mul: Parser[Mul] = "mul" ^^ (_ => Mul())
 
-  def div: Parser[DivCommand] = "div" ^^ (_ => DivCommand())
+  def div: Parser[Div] = "div" ^^ (_ => Div())
 
-  def rem: Parser[RemCommand] = "rem" ^^ (_ => RemCommand())
+  def rem: Parser[Rem] = "rem" ^^ (_ => Rem())
 
-  def apply(input: String): Either[ParserFailure, (Int, List[PostFixCommand])] = parseAll(program, input) match {
+  def lt: Parser[Lt] = "lt" ^^ (_ => Lt())
+
+  def gt: Parser[Gt] = "gt" ^^ (_ => Gt())
+
+  def eq: Parser[Eq] = "eq" ^^ (_ => Eq())
+
+  def pop: Parser[Pop] = "pop" ^^ (_ => Pop())
+
+  def swap: Parser[Swap] = "swap" ^^ (_ => Swap())
+
+  def sel: Parser[Sel] = "sel" ^^ (_ => Sel())
+
+  def apply(input: String): Either[ParserFailure, (Int, List[Command])] = parseAll(program, input) match {
     case Success(result, _) => Right(result)
     case NoSuccess(message, _) => Left(ParserFailure(message))
   }

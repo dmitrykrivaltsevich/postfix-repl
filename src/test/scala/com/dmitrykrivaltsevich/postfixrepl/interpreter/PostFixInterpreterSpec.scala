@@ -54,12 +54,55 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 2 rem)") must_== "not enough numbers to rem"}
       ${eval("(postfix 0 rem)") must_== "not enough numbers to rem"}
 
+    "lt" command:
+      ${eval("(postfix 0 1 2 lt)") must_== "1"}
+      ${eval("(postfix 0 2 1 lt)") must_== "0"}
+      ${eval("(postfix 0 1 lt)") must_== "not enough numbers to lt"}
+      ${eval("(postfix 0 lt)") must_== "not enough numbers to lt"}
+      {eval("(postfix 0 (1 2) 3 lt)") must_== "not enough numbers to lt"} // pending
+
+    "gt" command:
+      ${eval("(postfix 0 1 2 gt)") must_== "0"}
+      ${eval("(postfix 0 2 1 gt)") must_== "1"}
+      ${eval("(postfix 0 1 gt)") must_== "not enough numbers to gt"}
+      ${eval("(postfix 0 gt)") must_== "not enough numbers to gt"}
+      {eval("(postfix 0 (1 2) 3 gt)") must_== "not enough numbers to gt"} // pending
+
+    "eq" command:
+      ${eval("(postfix 0 1 2 eq)") must_== "0"}
+      ${eval("(postfix 0 2 2 eq)") must_== "1"}
+      ${eval("(postfix 0 1 eq)") must_== "not enough numbers to eq"}
+      ${eval("(postfix 0 eq)") must_== "not enough numbers to eq"}
+      {eval("(postfix 0 (1 2) 3 eq)") must_== "not enough numbers to eq"} // pending
+
+    "pop" command:
+      ${eval("(postfix 0 1 2 pop)") must_== "1"}
+      ${eval("(postfix 0 1 2 3 pop)") must_== "2"}
+      ${eval("(postfix 0 pop)") must_== "stack is empty"}
+      ${eval("(postfix 0 1 pop pop)") must_== "stack is empty"}
+
+    "swap" command:
+      ${eval("(postfix 0 1 2 swap)") must_== "1"}
+      ${eval("(postfix 0 1 swap)") must_== "not enough commands to swap"}
+      ${eval("(postfix 0 swap)") must_== "not enough commands to swap"}
+
+    "sel" command:
+      ${eval("(postfix 0 0 0 9 sel)") must_== "9"}
+      ${eval("(postfix 0 1 8 9 sel)") must_== "8"}
+      ${eval("(postfix 0 8 9 sel)") must_== "not enough values to sel"}
+      ${eval("(postfix 0 9 sel)") must_== "not enough values to sel"}
+      ${eval("(postfix 0 sel)") must_== "not enough values to sel"}
+      {eval("(postfix 0 1 8 (5 4 add) sel)") must_== "not enough values to sel"}
+
     mixed commands:
       ${eval("(postfix 0 1057 888 sub 514 add)") must_== "683"}
       ${eval("(postfix 0 1 2 add 3 sub 4 mul)") must_== "0"}
       ${eval("(postfix 0 3 4 mul add)") must_== "not enough numbers to add"}
       ${eval("(postfix 0 8 3 sub 3 div 1 add)") must_== "2"}
       ${eval("(postfix 0 13 4 div 5 add 3 rem)") must_== "2"}
+      ${eval("(postfix 0 0 1 lt 4 mul)") must_== "4"}
+      ${eval("(postfix 0 0 1 gt 4 mul)") must_== "0"}
+      ${eval("(postfix 0 0 0 eq)") must_== "1"}
   """
   // scalastyle:on
 

@@ -7,7 +7,7 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
   require(numberOfArguments == args.size) // TODO: move it into 'eval'
 
   @tailrec
-  final def eval(commands: List[PostFixCommand], stack: List[PostFixCommand]): ProgramResult = {
+  final def eval(commands: List[Command], stack: List[Command]): ProgramResult = {
     commands match {
       case Nil => resultFrom(stack)
       case head :: tail =>
@@ -21,46 +21,84 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
 
   // TODO: reduce complexity
   // scalastyle:off
-  private def eval(command: PostFixCommand, stack: List[PostFixCommand]): StepResult = command match {
-    case nc: NumericalCommand => StepSuccess(nc :: stack)
+  private def eval(command: Command, stack: List[Command]): StepResult = command match {
+    case nc: Numerical => StepSuccess(nc :: stack)
 
-    case AddCommand() => stack match {
-      case NumericalCommand(v1) :: NumericalCommand(v2) :: rest => StepSuccess(NumericalCommand(v2 + v1) :: rest)
+    case Add() => stack match {
+      case Numerical(v1) :: Numerical(v2) :: rest => StepSuccess(Numerical(v2 + v1) :: rest)
       case _ => StepFailure(stack, "not enough numbers to add")
     }
 
-    case SubCommand() => stack match {
-      case NumericalCommand(v1) :: NumericalCommand(v2) :: rest => StepSuccess(NumericalCommand(v2 - v1) :: rest)
+    case Sub() => stack match {
+      case Numerical(v1) :: Numerical(v2) :: rest => StepSuccess(Numerical(v2 - v1) :: rest)
       case _ => StepFailure(stack, "not enough numbers to sub")
     }
 
-    case MulCommand() => stack match {
-      case NumericalCommand(v1) :: NumericalCommand(v2) :: rest => StepSuccess(NumericalCommand(v2 * v1) :: rest)
+    case Mul() => stack match {
+      case Numerical(v1) :: Numerical(v2) :: rest => StepSuccess(Numerical(v2 * v1) :: rest)
       case _ => StepFailure(stack, "not enough numbers to mul")
     }
 
-    case DivCommand() => stack match {
-      case NumericalCommand(v1) :: NumericalCommand(v2) :: rest =>
+    case Div() => stack match {
+      case Numerical(v1) :: Numerical(v2) :: rest =>
         if (v1 == 0) StepFailure(stack, "divide by zero")
-        else StepSuccess(NumericalCommand(v2 / v1) :: rest)
+        else StepSuccess(Numerical(v2 / v1) :: rest)
       case _ => StepFailure(stack, "not enough numbers to div")
     }
 
-    case RemCommand() => stack match {
-      case NumericalCommand(v1) :: NumericalCommand(v2) :: rest =>
+    case Rem() => stack match {
+      case Numerical(v1) :: Numerical(v2) :: rest =>
         if (v1 == 0) StepFailure(stack, "divide by zero")
-        else StepSuccess(NumericalCommand(v2 % v1) :: rest)
+        else StepSuccess(Numerical(v2 % v1) :: rest)
       case _ => StepFailure(stack, "not enough numbers to rem")
+    }
+
+    case Lt() => stack match {
+      case Numerical(v1) :: Numerical(v2) :: rest =>
+        if (v2 < v1) StepSuccess(Numerical(1) :: rest)
+        else StepSuccess(Numerical(0) :: rest)
+      case _ => StepFailure(stack, "not enough numbers to lt")
+    }
+
+    case Gt() => stack match {
+      case Numerical(v1) :: Numerical(v2) :: rest =>
+        if (v2 > v1) StepSuccess(Numerical(1) :: rest)
+        else StepSuccess(Numerical(0) :: rest)
+      case _ => StepFailure(stack, "not enough numbers to gt")
+    }
+
+    case Eq() => stack match {
+      case Numerical(v1) :: Numerical(v2) :: rest =>
+        if (v2.equals(v1)) StepSuccess(Numerical(1) :: rest)
+        else StepSuccess(Numerical(0) :: rest)
+      case _ => StepFailure(stack, "not enough numbers to eq")
+    }
+
+    case Pop() => stack match {
+      case _ :: rest => StepSuccess(rest)
+      case _ => StepFailure(stack, "stack is empty")
+    }
+
+    case Swap() => stack match {
+      case c1 :: c2 :: rest => StepSuccess(c2 :: c1 :: rest)
+      case _ => StepFailure(stack, "not enough commands to swap")
+    }
+
+    case Sel() => stack match {
+      case c1 :: c2 :: Numerical(v) :: rest =>
+        if (v == 0) StepSuccess(c1 :: rest)
+        else StepSuccess(c2 :: rest)
+      case _ => StepFailure(stack, "not enough values to sel")
     }
 
     case _ => StepFailure(stack, s"unknown command '$command'")
   }
   // scalastyle:on
 
-  private def resultFrom(stack: List[PostFixCommand]): ProgramResult =
+  private def resultFrom(stack: List[Command]): ProgramResult =
     stack match {
       case Nil => ProgramFailure("empty stack")
-      case NumericalCommand(value) :: _ => ProgramSuccess(value)
+      case Numerical(value) :: _ => ProgramSuccess(value)
       case _ => ProgramFailure("not a number on top of the stack")
     }
 
@@ -71,5 +109,5 @@ case class ProgramSuccess(value: BigInt) extends ProgramResult
 case class ProgramFailure(message: String) extends ProgramResult
 
 trait StepResult
-case class StepSuccess(stack: List[PostFixCommand]) extends StepResult
-case class StepFailure(stack: List[PostFixCommand], message: String) extends StepResult
+case class StepSuccess(stack: List[Command]) extends StepResult
+case class StepFailure(stack: List[Command], message: String) extends StepResult
