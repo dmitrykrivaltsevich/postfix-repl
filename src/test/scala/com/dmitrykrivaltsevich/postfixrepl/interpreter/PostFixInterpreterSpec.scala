@@ -59,6 +59,7 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 2 1 lt)") must_== "0"}
       ${eval("(postfix 0 1 lt)") must_== "not enough numbers to lt"}
       ${eval("(postfix 0 lt)") must_== "not enough numbers to lt"}
+      {eval("(postfix 0 (1 2) 3 lt)") must_== "not enough numbers to lt"} // pending
 
     mixed commands:
       ${eval("(postfix 0 1057 888 sub 514 add)") must_== "683"}
