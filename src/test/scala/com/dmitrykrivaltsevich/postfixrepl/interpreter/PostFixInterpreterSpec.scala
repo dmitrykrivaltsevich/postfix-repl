@@ -54,12 +54,19 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 2 rem)") must_== "not enough numbers to rem"}
       ${eval("(postfix 0 rem)") must_== "not enough numbers to rem"}
 
+    "lt" command:
+      ${eval("(postfix 0 1 2 lt)") must_== "1"}
+      ${eval("(postfix 0 2 1 lt)") must_== "0"}
+      ${eval("(postfix 0 1 lt)") must_== "not enough numbers to lt"}
+      ${eval("(postfix 0 lt)") must_== "not enough numbers to lt"}
+
     mixed commands:
       ${eval("(postfix 0 1057 888 sub 514 add)") must_== "683"}
       ${eval("(postfix 0 1 2 add 3 sub 4 mul)") must_== "0"}
       ${eval("(postfix 0 3 4 mul add)") must_== "not enough numbers to add"}
       ${eval("(postfix 0 8 3 sub 3 div 1 add)") must_== "2"}
       ${eval("(postfix 0 13 4 div 5 add 3 rem)") must_== "2"}
+      ${eval("(postfix 0 0 1 lt 4 mul)") must_== "4"}
   """
   // scalastyle:on
 

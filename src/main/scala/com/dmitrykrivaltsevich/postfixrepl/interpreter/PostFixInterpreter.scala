@@ -53,6 +53,13 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
       case _ => StepFailure(stack, "not enough numbers to rem")
     }
 
+    case LtCommand() => stack match {
+      case NumericalCommand(v1) :: NumericalCommand(v2) :: rest =>
+        if (v2 < v1) StepSuccess(NumericalCommand(1) :: rest)
+        else StepSuccess(NumericalCommand(0) :: rest)
+      case _ => StepFailure(stack, "not enough numbers to lt")
+    }
+
     case _ => StepFailure(stack, s"unknown command '$command'")
   }
   // scalastyle:on
