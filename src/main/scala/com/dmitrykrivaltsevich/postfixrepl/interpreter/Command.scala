@@ -10,3 +10,4 @@ case class Div() extends Command
 case class Rem() extends Command
 case class Lt() extends Command
 case class Gt() extends Command
+case class Eq() extends Command
