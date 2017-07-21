@@ -86,6 +86,14 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 1 swap)") must_== "not enough commands to swap"}
       ${eval("(postfix 0 swap)") must_== "not enough commands to swap"}
 
+    "sel" command:
+      ${eval("(postfix 0 0 0 9 sel)") must_== "9"}
+      ${eval("(postfix 0 1 8 9 sel)") must_== "8"}
+      ${eval("(postfix 0 8 9 sel)") must_== "not enough values to sel"}
+      ${eval("(postfix 0 9 sel)") must_== "not enough values to sel"}
+      ${eval("(postfix 0 sel)") must_== "not enough values to sel"}
+      {eval("(postfix 0 1 8 (5 4 add) sel)") must_== "not enough values to sel"}
+
     mixed commands:
       ${eval("(postfix 0 1057 888 sub 514 add)") must_== "683"}
       ${eval("(postfix 0 1 2 add 3 sub 4 mul)") must_== "0"}

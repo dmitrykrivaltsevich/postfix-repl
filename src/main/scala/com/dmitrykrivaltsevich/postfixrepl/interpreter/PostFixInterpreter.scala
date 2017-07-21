@@ -84,6 +84,13 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
       case _ => StepFailure(stack, "not enough commands to swap")
     }
 
+    case Sel() => stack match {
+      case c1 :: c2 :: Numerical(v) :: rest =>
+        if (v == 0) StepSuccess(c1 :: rest)
+        else StepSuccess(c2 :: rest)
+      case _ => StepFailure(stack, "not enough values to sel")
+    }
+
     case _ => StepFailure(stack, s"unknown command '$command'")
   }
   // scalastyle:on
