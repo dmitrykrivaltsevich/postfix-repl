@@ -5,6 +5,7 @@ import org.specs2.specification.core.SpecStructure
 
 class PostFixInterpreterSpec extends Specification {
 
+  // scalastyle:off
   def is: SpecStructure = s2"""
     numerical command:
       ${eval("(postfix 0 1)") must_== "1"}
@@ -42,12 +43,25 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 2 div)") must_== "not enough numbers to div"}
       ${eval("(postfix 0 div)") must_== "not enough numbers to div"}
 
+    "rem" command:
+      ${eval("(postfix 0 4 2 rem)") must_== "0"}
+      ${eval("(postfix 0 3 1 rem)") must_== "0"}
+      ${eval("(postfix 0 1 3 rem)") must_== "1"}
+      ${eval("(postfix 0 5 2 rem)") must_== "1"}
+      ${eval("(postfix 0 17 3 rem)") must_== "2"}
+      ${eval("(postfix 0 0 2 rem)") must_== "0"}
+      ${eval("(postfix 0 2 0 rem)") must_== "divide by zero"}
+      ${eval("(postfix 0 2 rem)") must_== "not enough numbers to rem"}
+      ${eval("(postfix 0 rem)") must_== "not enough numbers to rem"}
+
     mixed commands:
       ${eval("(postfix 0 1057 888 sub 514 add)") must_== "683"}
       ${eval("(postfix 0 1 2 add 3 sub 4 mul)") must_== "0"}
       ${eval("(postfix 0 3 4 mul add)") must_== "not enough numbers to add"}
       ${eval("(postfix 0 8 3 sub 3 div 1 add)") must_== "2"}
+      ${eval("(postfix 0 13 4 div 5 add 3 rem)") must_== "2"}
   """
+  // scalastyle:on
 
   private def eval(input: String) = {
     val Right((_, commands)) = PostFixCommandParser(input)
