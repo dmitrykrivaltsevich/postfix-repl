@@ -16,7 +16,7 @@ object PostFixCommandParser extends RegexParsers {
     head :: tail
   }
 
-  def command: Parser[PostFixCommand] = numerical | add | sub | mul | div | rem
+  def command: Parser[PostFixCommand] = numerical | add | sub | mul | div | rem withFailureMessage "command or numeral expected"
 
   def numerical: Parser[NumericalCommand] = """-?\d+""".r ^^ { result =>
     NumericalCommand(BigInt(result))
