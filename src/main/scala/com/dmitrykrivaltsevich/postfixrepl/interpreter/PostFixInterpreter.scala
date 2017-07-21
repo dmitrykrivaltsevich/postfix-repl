@@ -74,6 +74,11 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
       case _ => StepFailure(stack, "not enough numbers to eq")
     }
 
+    case Pop() => stack match {
+      case _ :: rest => StepSuccess(rest)
+      case _ => StepFailure(stack, "stack is empty")
+    }
+
     case _ => StepFailure(stack, s"unknown command '$command'")
   }
   // scalastyle:on

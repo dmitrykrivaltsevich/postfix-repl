@@ -75,6 +75,12 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 eq)") must_== "not enough numbers to eq"}
       {eval("(postfix 0 (1 2) 3 eq)") must_== "not enough numbers to eq"} // pending
 
+    "pop" command:
+      ${eval("(postfix 0 1 2 pop)") must_== "1"}
+      ${eval("(postfix 0 1 2 3 pop)") must_== "2"}
+      ${eval("(postfix 0 pop)") must_== "stack is empty"}
+      ${eval("(postfix 0 1 pop pop)") must_== "stack is empty"}
+
     mixed commands:
       ${eval("(postfix 0 1057 888 sub 514 add)") must_== "683"}
       ${eval("(postfix 0 1 2 add 3 sub 4 mul)") must_== "0"}
