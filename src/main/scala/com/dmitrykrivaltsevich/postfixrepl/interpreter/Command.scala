@@ -14,3 +14,4 @@ case class Eq() extends Command
 case class Pop() extends Command
 case class Swap() extends Command
 case class Sel() extends Command
+case class Nget() extends Command

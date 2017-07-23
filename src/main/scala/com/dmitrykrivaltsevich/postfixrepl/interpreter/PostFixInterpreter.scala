@@ -91,6 +91,19 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
       case _ => StepFailure(stack, "not enough values to sel")
     }
 
+    case Nget() => stack match {
+      case Numerical(v) :: rest =>
+        if (v < 1) StepFailure(stack, s"index $v is too small")
+        else if (v > rest.size) StepFailure(stack, s"index $v is too large")
+        else {
+          rest.drop(v.toInt - 1).head match {
+            case n: Numerical => StepSuccess(n :: rest)
+            case _ => StepFailure(stack, s"value at index $v is not a numeral")
+          }
+        }
+      case _ => StepFailure(stack, "v_index is not a numeral")
+    }
+
     case _ => StepFailure(stack, s"unknown command '$command'")
   }
   // scalastyle:on
