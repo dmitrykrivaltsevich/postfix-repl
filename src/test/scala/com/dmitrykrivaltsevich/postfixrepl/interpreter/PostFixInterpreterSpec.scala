@@ -104,6 +104,13 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 5 4 (1) nget)") must_== "v_index is not a numeral"}
       ${eval("(postfix 0 3 (2 mul) 1 nget)") must_== "value at index 1 is not a numeral"}
 
+    "exec" command:
+      ${eval("(postfix 0 (1) exec)") must_== "1"}
+      ${eval("(postfix 0 (1 2) exec)") must_== "2"}
+      ${eval("(postfix 0 (1 2 add) exec)") must_== "3"}
+      ${eval("(postfix 0 exec)") must_== "stack is empty"}
+      ${eval("(postfix 0 1 exec)") must_== "top stack values isn't an executable sequence"}
+
     mixed commands:
       ${eval("(postfix 0 1057 888 sub 514 add)") must_== "683"}
       ${eval("(postfix 0 1 2 add 3 sub 4 mul)") must_== "0"}
