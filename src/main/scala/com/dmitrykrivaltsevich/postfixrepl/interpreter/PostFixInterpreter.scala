@@ -104,6 +104,8 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
       case _ => StepFailure(stack, "v_index is not a numeral")
     }
 
+    case es: ExecutableSequence => StepSuccess(es :: stack)
+
     case _ => StepFailure(stack, s"unknown command '$command'")
   }
   // scalastyle:on

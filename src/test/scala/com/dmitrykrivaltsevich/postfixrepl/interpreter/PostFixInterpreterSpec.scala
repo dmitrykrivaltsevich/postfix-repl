@@ -7,6 +7,7 @@ class PostFixInterpreterSpec extends Specification {
 
   // scalastyle:off
   def is: SpecStructure = s2"""
+
     numerical command:
       ${eval("(postfix 0 1)") must_== "1"}
       ${eval("(postfix 0 1 2)") must_== "2"}
@@ -59,21 +60,21 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 2 1 lt)") must_== "0"}
       ${eval("(postfix 0 1 lt)") must_== "not enough numbers to lt"}
       ${eval("(postfix 0 lt)") must_== "not enough numbers to lt"}
-      {eval("(postfix 0 (1 2) 3 lt)") must_== "not enough numbers to lt"} // pending
+      ${eval("(postfix 0 (1 2) 3 lt)") must_== "not enough numbers to lt"}
 
     "gt" command:
       ${eval("(postfix 0 1 2 gt)") must_== "0"}
       ${eval("(postfix 0 2 1 gt)") must_== "1"}
       ${eval("(postfix 0 1 gt)") must_== "not enough numbers to gt"}
       ${eval("(postfix 0 gt)") must_== "not enough numbers to gt"}
-      {eval("(postfix 0 (1 2) 3 gt)") must_== "not enough numbers to gt"} // pending
+      ${eval("(postfix 0 (1 2) 3 gt)") must_== "not enough numbers to gt"}
 
     "eq" command:
       ${eval("(postfix 0 1 2 eq)") must_== "0"}
       ${eval("(postfix 0 2 2 eq)") must_== "1"}
       ${eval("(postfix 0 1 eq)") must_== "not enough numbers to eq"}
       ${eval("(postfix 0 eq)") must_== "not enough numbers to eq"}
-      {eval("(postfix 0 (1 2) 3 eq)") must_== "not enough numbers to eq"} // pending
+      ${eval("(postfix 0 (1 2) 3 eq)") must_== "not enough numbers to eq"}
 
     "pop" command:
       ${eval("(postfix 0 1 2 pop)") must_== "1"}
@@ -92,15 +93,16 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 8 9 sel)") must_== "not enough values to sel"}
       ${eval("(postfix 0 9 sel)") must_== "not enough values to sel"}
       ${eval("(postfix 0 sel)") must_== "not enough values to sel"}
-      {eval("(postfix 0 1 8 (5 4 add) sel)") must_== "not enough values to sel"} // pending
+      ${eval("(postfix 0 0 8 (5 4 add) sel)") must_== "not a number on top of the stack"}
+      ${eval("(postfix 0 (1) 8 9 sel)") must_== "not enough values to sel"}
 
     "nget" command:
       ${eval("(postfix 0 5 4 1 nget)") must_== "4"}
       ${eval("(postfix 0 5 4 2 nget)") must_== "5"}
       ${eval("(postfix 0 5 4 3 nget)") must_== "index 3 is too large"}
       ${eval("(postfix 0 5 4 0 nget)") must_== "index 0 is too small"}
-      {eval("(postfix 0 5 4 (1) nget)") must_== "v_index is not a numeral"}
-      {eval("(postfix 0 3 (2 mul) 1 nget)") must_== "value at index 1 is not a numeral"} // pending
+      ${eval("(postfix 0 5 4 (1) nget)") must_== "v_index is not a numeral"}
+      ${eval("(postfix 0 3 (2 mul) 1 nget)") must_== "value at index 1 is not a numeral"}
 
     mixed commands:
       ${eval("(postfix 0 1057 888 sub 514 add)") must_== "683"}
@@ -113,6 +115,7 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 0 0 eq)") must_== "1"}
       ${eval("(postfix 0 5 1 nget mul)") must_== "25"}
       ${eval("(postfix 0 2 5 4 3 4 nget 5 nget mul mul swap 4 nget mul add add)") must_== "25"}
+
   """
   // scalastyle:on
 
