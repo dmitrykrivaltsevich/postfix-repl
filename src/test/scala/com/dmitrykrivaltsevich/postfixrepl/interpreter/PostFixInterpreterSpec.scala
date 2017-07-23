@@ -123,6 +123,25 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 5 1 nget mul)") must_== "25"}
       ${eval("(postfix 0 2 5 4 3 4 nget 5 nget mul mul swap 4 nget mul add add)") must_== "25"}
 
+    examples from the book (pp. 10-13):
+      ${eval("(postfix 0 4 3)") must_== "3"}
+      ${eval("(postfix 0 4 3 swap)") must_== "4"}
+      ${eval("(postfix 0 5 4 3 pop swap)") must_== "5"}
+      ${eval("(postfix 0 3 swap)") must_== "not enough commands to swap"}
+      ${eval("(postfix 0 5 4 pop)") must_== "5"}
+      ${eval("(postfix 0 3 4 sub)") must_== "-1"}
+      ${eval("(postfix 0 3 4 add 5 mul 6 sub 7 div)") must_== "4"}
+      ${eval("(postfix 0 3 4 5 6 7 add mul sub swap div)") must_== "-20"}
+      ${eval("(postfix 0 1 20 300 4000 swap pop add)") must_== "4020"}
+      ${eval("(postfix 0 7 3 add 2 div)") must_== "5"} // an averaging program
+      ${eval("(postfix 0 17 3 div)") must_== "5"}
+      ${eval("(postfix 0 17 3 rem)") must_== "2"}
+      ${eval("(postfix 0 3 4 lt)") must_== "1"}
+      ${eval("(postfix 0 5 4 lt)") must_== "0"}
+      ${eval("(postfix 0 3 4 lt 10 add)") must_== "11"}
+      ${eval("(postfix 0 3 4 mul add)") must_== "not enough numbers to add"}
+      ${eval("(postfix 0 5 4 4 sub div)") must_== "divide by zero"}
+
   """
   // scalastyle:on
 
