@@ -146,6 +146,14 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 (2 mul))") must_== "not a number on top of the stack"}
       ${eval("(postfix 0 3 (2 mul) gt)") must_== "not enough numbers to gt"}
       ${eval("(postfix 0 3 exec)") must_== "top stack value isn't an executable sequence"}
+      ${eval("(postfix 0 (7 swap exec) (0 swap sub) swap exec)") must_== "-7"}
+      ${eval("(postfix 0 2 -10 (mul sub) (1 nget mul) 4 nget swap exec swap exec)") must_== "42"} // b - a*b^2
+      ${eval("(postfix 0 1 2 3 sel)") must_== "2"}
+      ${eval("(postfix 0 0 2 3 sel)") must_== "3"}
+      ${eval("(postfix 0 17 2 3 sel)") must_== "2"}
+      ${eval("(postfix 0 (2 mul) 3 4 sel)") must_== "not enough values to sel"}
+      ${eval("(postfix 0 6 5 4 3 lt (add) (mul) sel exec)") must_== "30"}
+      ${eval("(postfix 0 6 5 3 4 lt (add) (mul) sel exec)") must_== "11"}
 
   """
   // scalastyle:on
