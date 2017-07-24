@@ -109,7 +109,7 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
     case Exec() => stack match {
       case ExecutableSequence(commands) :: rest => StepSuccess(rest, commands)
       case Nil => StepFailure(stack, "stack is empty")
-      case _ => StepFailure(stack, "top stack values isn't an executable sequence")
+      case _ => StepFailure(stack, "top stack value isn't an executable sequence")
     }
 
     case _ => StepFailure(stack, s"unknown command '$command'")

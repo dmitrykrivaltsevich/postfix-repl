@@ -109,7 +109,7 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 (1 2) exec)") must_== "2"}
       ${eval("(postfix 0 (1 2 add) exec)") must_== "3"}
       ${eval("(postfix 0 exec)") must_== "stack is empty"}
-      ${eval("(postfix 0 1 exec)") must_== "top stack values isn't an executable sequence"}
+      ${eval("(postfix 0 1 exec)") must_== "top stack value isn't an executable sequence"}
 
     mixed commands:
       ${eval("(postfix 0 1057 888 sub 514 add)") must_== "683"}
@@ -141,6 +141,11 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 3 4 lt 10 add)") must_== "11"}
       ${eval("(postfix 0 3 4 mul add)") must_== "not enough numbers to add"}
       ${eval("(postfix 0 5 4 4 sub div)") must_== "divide by zero"}
+      ${eval("(postfix 0 7 (2 mul) exec)") must_== "14"} // (2 mul) is a doubling subroutine
+      ${eval("(postfix 0 (0 swap sub) 7 swap exec)") must_== "-7"} // (0 swap sub) is a negation subrouting
+      ${eval("(postfix 0 (2 mul))") must_== "not a number on top of the stack"}
+      ${eval("(postfix 0 3 (2 mul) gt)") must_== "not enough numbers to gt"}
+      ${eval("(postfix 0 3 exec)") must_== "top stack value isn't an executable sequence"}
 
   """
   // scalastyle:on
