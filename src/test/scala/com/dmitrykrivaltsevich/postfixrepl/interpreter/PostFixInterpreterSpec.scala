@@ -7,6 +7,7 @@ class PostFixInterpreterSpec extends Specification {
 
   // scalastyle:off
   def is: SpecStructure = s2"""
+
     numerical command:
       ${eval("(postfix 0 1)") must_== "1"}
       ${eval("(postfix 0 1 2)") must_== "2"}
@@ -59,21 +60,21 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 2 1 lt)") must_== "0"}
       ${eval("(postfix 0 1 lt)") must_== "not enough numbers to lt"}
       ${eval("(postfix 0 lt)") must_== "not enough numbers to lt"}
-      {eval("(postfix 0 (1 2) 3 lt)") must_== "not enough numbers to lt"} // pending
+      ${eval("(postfix 0 (1 2) 3 lt)") must_== "not enough numbers to lt"}
 
     "gt" command:
       ${eval("(postfix 0 1 2 gt)") must_== "0"}
       ${eval("(postfix 0 2 1 gt)") must_== "1"}
       ${eval("(postfix 0 1 gt)") must_== "not enough numbers to gt"}
       ${eval("(postfix 0 gt)") must_== "not enough numbers to gt"}
-      {eval("(postfix 0 (1 2) 3 gt)") must_== "not enough numbers to gt"} // pending
+      ${eval("(postfix 0 (1 2) 3 gt)") must_== "not enough numbers to gt"}
 
     "eq" command:
       ${eval("(postfix 0 1 2 eq)") must_== "0"}
       ${eval("(postfix 0 2 2 eq)") must_== "1"}
       ${eval("(postfix 0 1 eq)") must_== "not enough numbers to eq"}
       ${eval("(postfix 0 eq)") must_== "not enough numbers to eq"}
-      {eval("(postfix 0 (1 2) 3 eq)") must_== "not enough numbers to eq"} // pending
+      ${eval("(postfix 0 (1 2) 3 eq)") must_== "not enough numbers to eq"}
 
     "pop" command:
       ${eval("(postfix 0 1 2 pop)") must_== "1"}
@@ -92,15 +93,23 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 8 9 sel)") must_== "not enough values to sel"}
       ${eval("(postfix 0 9 sel)") must_== "not enough values to sel"}
       ${eval("(postfix 0 sel)") must_== "not enough values to sel"}
-      {eval("(postfix 0 1 8 (5 4 add) sel)") must_== "not enough values to sel"} // pending
+      ${eval("(postfix 0 0 8 (5 4 add) sel)") must_== "not a number on top of the stack"}
+      ${eval("(postfix 0 (1) 8 9 sel)") must_== "not enough values to sel"}
 
     "nget" command:
       ${eval("(postfix 0 5 4 1 nget)") must_== "4"}
       ${eval("(postfix 0 5 4 2 nget)") must_== "5"}
       ${eval("(postfix 0 5 4 3 nget)") must_== "index 3 is too large"}
       ${eval("(postfix 0 5 4 0 nget)") must_== "index 0 is too small"}
-      {eval("(postfix 0 5 4 (1) nget)") must_== "v_index is not a numeral"}
-      {eval("(postfix 0 3 (2 mul) 1 nget)") must_== "value at index 1 is not a numeral"} // pending
+      ${eval("(postfix 0 5 4 (1) nget)") must_== "v_index is not a numeral"}
+      ${eval("(postfix 0 3 (2 mul) 1 nget)") must_== "value at index 1 is not a numeral"}
+
+    "exec" command:
+      ${eval("(postfix 0 (1) exec)") must_== "1"}
+      ${eval("(postfix 0 (1 2) exec)") must_== "2"}
+      ${eval("(postfix 0 (1 2 add) exec)") must_== "3"}
+      ${eval("(postfix 0 exec)") must_== "stack is empty"}
+      ${eval("(postfix 0 1 exec)") must_== "top stack value isn't an executable sequence"}
 
     mixed commands:
       ${eval("(postfix 0 1057 888 sub 514 add)") must_== "683"}
@@ -113,6 +122,41 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 0 0 eq)") must_== "1"}
       ${eval("(postfix 0 5 1 nget mul)") must_== "25"}
       ${eval("(postfix 0 2 5 4 3 4 nget 5 nget mul mul swap 4 nget mul add add)") must_== "25"}
+
+    examples from the book (pp. 10-13):
+      ${eval("(postfix 0 4 3)") must_== "3"}
+      ${eval("(postfix 0 4 3 swap)") must_== "4"}
+      ${eval("(postfix 0 5 4 3 pop swap)") must_== "5"}
+      ${eval("(postfix 0 3 swap)") must_== "not enough commands to swap"}
+      ${eval("(postfix 0 5 4 pop)") must_== "5"}
+      ${eval("(postfix 0 3 4 sub)") must_== "-1"}
+      ${eval("(postfix 0 3 4 add 5 mul 6 sub 7 div)") must_== "4"}
+      ${eval("(postfix 0 3 4 5 6 7 add mul sub swap div)") must_== "-20"}
+      ${eval("(postfix 0 1 20 300 4000 swap pop add)") must_== "4020"}
+      ${eval("(postfix 0 7 3 add 2 div)") must_== "5"} // an averaging program
+      ${eval("(postfix 0 17 3 div)") must_== "5"}
+      ${eval("(postfix 0 17 3 rem)") must_== "2"}
+      ${eval("(postfix 0 3 4 lt)") must_== "1"}
+      ${eval("(postfix 0 5 4 lt)") must_== "0"}
+      ${eval("(postfix 0 3 4 lt 10 add)") must_== "11"}
+      ${eval("(postfix 0 3 4 mul add)") must_== "not enough numbers to add"}
+      ${eval("(postfix 0 5 4 4 sub div)") must_== "divide by zero"}
+      ${eval("(postfix 0 7 (2 mul) exec)") must_== "14"} // (2 mul) is a doubling subroutine
+      ${eval("(postfix 0 (0 swap sub) 7 swap exec)") must_== "-7"} // (0 swap sub) is a negation subrouting
+      ${eval("(postfix 0 (2 mul))") must_== "not a number on top of the stack"}
+      ${eval("(postfix 0 3 (2 mul) gt)") must_== "not enough numbers to gt"}
+      ${eval("(postfix 0 3 exec)") must_== "top stack value isn't an executable sequence"}
+      ${eval("(postfix 0 (7 swap exec) (0 swap sub) swap exec)") must_== "-7"}
+      ${eval("(postfix 0 2 -10 (mul sub) (1 nget mul) 4 nget swap exec swap exec)") must_== "42"} // b - a*b^2
+      ${eval("(postfix 0 1 2 3 sel)") must_== "2"}
+      ${eval("(postfix 0 0 2 3 sel)") must_== "3"}
+      ${eval("(postfix 0 17 2 3 sel)") must_== "2"}
+      ${eval("(postfix 0 (2 mul) 3 4 sel)") must_== "not enough values to sel"}
+      ${eval("(postfix 0 6 5 4 3 lt (add) (mul) sel exec)") must_== "30"}
+      ${eval("(postfix 0 6 5 3 4 lt (add) (mul) sel exec)") must_== "11"}
+      ${eval("(postfix 0 -7 1 nget 0 lt (0 swap sub) () sel exec)") must_== "7"} // absolute value program
+      ${eval("(postfix 0 6 1 nget 0 lt (0 swap sub) () sel exec)") must_== "6"}
+
   """
   // scalastyle:on
 

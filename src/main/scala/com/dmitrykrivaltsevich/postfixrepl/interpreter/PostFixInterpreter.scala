@@ -13,7 +13,7 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
       case head :: tail =>
         val stepResult = eval(head, stack)
         stepResult match {
-          case StepSuccess(updatedStack) => eval(tail, updatedStack)
+          case StepSuccess(updatedStack, commandsToPrepend) => eval(commandsToPrepend ++ tail, updatedStack)
           case StepFailure(_, message) => ProgramFailure(message)
         }
     }
@@ -104,6 +104,14 @@ class PostFixInterpreter(numberOfArguments: Int, args: List[Int]) {
       case _ => StepFailure(stack, "v_index is not a numeral")
     }
 
+    case es: ExecutableSequence => StepSuccess(es :: stack)
+
+    case Exec() => stack match {
+      case ExecutableSequence(commands) :: rest => StepSuccess(rest, commands)
+      case Nil => StepFailure(stack, "stack is empty")
+      case _ => StepFailure(stack, "top stack value isn't an executable sequence")
+    }
+
     case _ => StepFailure(stack, s"unknown command '$command'")
   }
   // scalastyle:on
@@ -122,5 +130,5 @@ case class ProgramSuccess(value: BigInt) extends ProgramResult
 case class ProgramFailure(message: String) extends ProgramResult
 
 trait StepResult
-case class StepSuccess(stack: List[Command]) extends StepResult
+case class StepSuccess(stack: List[Command], commands: List[Command] = Nil) extends StepResult
 case class StepFailure(stack: List[Command], message: String) extends StepResult

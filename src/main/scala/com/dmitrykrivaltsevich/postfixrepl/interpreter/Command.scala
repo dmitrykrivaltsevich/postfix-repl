@@ -15,3 +15,5 @@ case class Pop() extends Command
 case class Swap() extends Command
 case class Sel() extends Command
 case class Nget() extends Command
+case class Exec() extends Command
+case class ExecutableSequence(commands: List[Command]) extends Command
