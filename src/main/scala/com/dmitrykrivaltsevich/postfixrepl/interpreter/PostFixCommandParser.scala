@@ -51,8 +51,8 @@ object PostFixCommandParser extends RegexParsers {
 
   def exec: Parser[Exec] = "exec" ^^ (_ => Exec())
 
-  def executableSequence: Parser[ExecutableSequence] = "(" ~> commandList <~ ")" ^^ { result =>
-    ExecutableSequence(result)
+  def executableSequence: Parser[ExecutableSequence] = "(" ~> opt(commandList) <~ ")" ^^ { result =>
+    ExecutableSequence(result.getOrElse(Nil))
   }
 
   def apply(input: String): Either[ParserFailure, (Int, List[Command])] = parseAll(program, input) match {

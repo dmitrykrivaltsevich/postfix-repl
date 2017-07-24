@@ -154,6 +154,8 @@ class PostFixInterpreterSpec extends Specification {
       ${eval("(postfix 0 (2 mul) 3 4 sel)") must_== "not enough values to sel"}
       ${eval("(postfix 0 6 5 4 3 lt (add) (mul) sel exec)") must_== "30"}
       ${eval("(postfix 0 6 5 3 4 lt (add) (mul) sel exec)") must_== "11"}
+      ${eval("(postfix 0 -7 1 nget 0 lt (0 swap sub) () sel exec)") must_== "7"} // absolute value program
+      ${eval("(postfix 0 6 1 nget 0 lt (0 swap sub) () sel exec)") must_== "6"}
 
   """
   // scalastyle:on
