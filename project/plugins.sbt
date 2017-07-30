@@ -12,3 +12,7 @@ addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.5.0")
 
 // displays dependency updates
 addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.3.1")
+
+// OWASP dependency check
+addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.1.9")
+

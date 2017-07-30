@@ -6,6 +6,6 @@ jdk:
 script:
   - sbt clean coverage test
 after_success:
-  - sbt coverageReport
+  - sbt coverageReport dependencyCheck
   - bash <(curl -s https://codecov.io/bash)
 sudo: false
