@@ -1,11 +1,18 @@
 language: scala
 scala:
-    - 2.12.2
+    - 2.12.3
 jdk:
     - oraclejdk8
 script:
   - sbt clean coverage test
 after_success:
-  - sbt coverageReport
+  - sbt coverageReport dependencyCheck
   - bash <(curl -s https://codecov.io/bash)
 sudo: false
+notifications:
+  email:
+    recipients:
+      - dmitry.krivaltsevich@gmail.com
+    on_success: never  # default: change
+    on_failure: always # default: always
+ 
